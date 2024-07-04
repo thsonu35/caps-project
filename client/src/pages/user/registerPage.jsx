@@ -29,6 +29,10 @@ const Register = () => {
         setFormData({ ...formData, [name]: value });
     };
 
+    const redirectlogin =async () =>{
+        navigate('/login')
+    }
+
     const handleSubmit = async (e) => {
         e.preventDefault();
 
@@ -142,7 +146,7 @@ const Register = () => {
                             </form>
                         </div>
                         <footer>
-                            <p>Already have an account? <a href="/login">Log in</a></p>
+                            <p>Already have an account? <a onClick={redirectlogin} >Log in</a></p>
                         </footer>
                     </div>
                 </div>

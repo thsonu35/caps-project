@@ -33,6 +33,10 @@ const LoginPage = () => {
         setFormData({ ...formData, [e.target.name]: e.target.value });
     };
 
+    const register =()=>{
+        navigate('/register')
+    }
+
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
@@ -117,7 +121,7 @@ const LoginPage = () => {
                             </form>
                         </div>
                         <footer>
-                            <p>Don't have an account yet? <a href="/register">Register</a></p>
+                            <p>Don't have an account yet? <a onClick={register}>Register</a></p>
                         </footer>
                     </div>
                 </div>
