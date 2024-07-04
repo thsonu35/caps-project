@@ -138,7 +138,7 @@ const Register = () => {
                                         />
                                     </div>
                                 </div>
-                                <button type="submit" className="register-button">Register</button>
+                                <button type="submit" className="register-button" onClick={handleSubmit}>Register</button>
                             </form>
                         </div>
                         <footer>

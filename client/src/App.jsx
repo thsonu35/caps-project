@@ -1,5 +1,5 @@
 import React from 'react';
-import { BrowserRouter, Route, Routes  } from 'react-router-dom';
+import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import LoginPage from './pages/user/loginPage';
 import Register from './pages/user/registerPage';
 import { Toaster } from "react-hot-toast";
@@ -16,34 +16,34 @@ function App() {
                 <Route path="/login" element={<LoginPage />} />
 
                 <Route path="/register" element={<Register />} />
-                <Route path="/share/:id" element={<Sharepage/>}/>
+                <Route path="/share/:id" element={<Sharepage />} />
 
 
-                <Route 
-                    path="/dashboard" 
+                <Route
+                    path="/dashboard"
                     element={
                         <ProtectedRoute>
                             <Dashboard />
                         </ProtectedRoute>
-                    } 
+                    }
                 />
-                <Route 
-                    path="/analytics" 
+                <Route
+                    path="/analytics"
                     element={
                         <ProtectedRoute>
                             <Analytics />
                         </ProtectedRoute>
-                    } 
+                    }
                 />
-                <Route 
-                    path="/setting" 
+                <Route
+                    path="/setting"
                     element={
                         <ProtectedRoute>
                             <Settings />
                         </ProtectedRoute>
-                    } 
+                    }
                 />
-              
+
             </Routes>
             <Toaster />
         </BrowserRouter>
