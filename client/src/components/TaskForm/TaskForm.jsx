@@ -6,6 +6,7 @@ import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import { Toaster, toast } from 'react-hot-toast';
 import { Navigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 const TaskForm = ({ task: initialTask, onSave, onCancel }) => {
   const [task, setTask] = useState({
@@ -77,7 +78,7 @@ const TaskForm = ({ task: initialTask, onSave, onCancel }) => {
 
       console.log('Task successfully saved:', response.data);
       onSave(response.data);
-      Navigate('/dashboard')
+      useNavigate('/dashboard')
     } catch (error) {
       console.error('Error saving task:', error.response ? error.response.data : error.message);
     }
