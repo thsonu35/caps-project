@@ -78,7 +78,7 @@ const navigate = useNavigate();
 
       console.log('Task successfully saved:', response.data);
       navigate('/dashboard');
-      onCancel   
+      {onCancel   }
       toast.success('Task successfully saved');
     } catch (error) {
       console.error('Error saving task:', error.response ? error.response.data : error.message);
