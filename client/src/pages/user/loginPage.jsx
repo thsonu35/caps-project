@@ -6,7 +6,7 @@ import Register from '../user/registerPage'
 import './Register.css';
 import astronautImage from '/Artastronot.png';
 import logo from '/Backastro.png';
-import user from '/user.png';
+// import user from '/user.png';
 import eyeIcon from '/eye.png'; 
 import lockIcon from '/lock.png';
 import emailIcon from '/email.png';

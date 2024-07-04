@@ -5,7 +5,7 @@ import { FaTrashAlt } from 'react-icons/fa';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import { Toaster, toast } from 'react-hot-toast';
-import { Navigate , useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 const TaskForm = ({ task: initialTask, onSave, onCancel }) => {
   const [task, setTask] = useState({
@@ -15,6 +15,7 @@ const TaskForm = ({ task: initialTask, onSave, onCancel }) => {
     dueDate: initialTask?.dueDate ? new Date(initialTask.dueDate) : null,
     checklist: initialTask?.checklist || [],
   });
+const navigate = useNavigate();
 
   const [isTitleValid, setIsTitleValid] = useState(true);
 
@@ -76,9 +77,8 @@ const TaskForm = ({ task: initialTask, onSave, onCancel }) => {
       }
 
       console.log('Task successfully saved:', response.data);
-      onCancel()
-      onSave(response.data);
-    } catch (error) {
+      navigate('/dashboard');
+navigate('/dashboard')    } catch (error) {
       console.error('Error saving task:', error.response ? error.response.data : error.message);
     }
   };
