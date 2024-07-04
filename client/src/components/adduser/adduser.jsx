@@ -1,36 +1,36 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import { toast } from 'react-hot-toast';
-import 'react-toastify/dist/ReactToastify.css';
 import './adduser.css'; // Import CSS for styling
 import { useNavigate } from 'react-router-dom';
 
 const AddUser = () => {
     const [email, setEmail] = useState('');
     const [userFound, setUserFound] = useState(false); // State to track if user is found
-  
+    const navigate = useNavigate(); // Initialize useNavigate
+
     const handleAddUser = async () => {
-      try {
-        const response = await axios.post('https://serverside-api.onrender.com/api/auth/check-user', { email });
-        if (response.data.exists) {
-          toast.success(`${email} added to board`);
-          setUserFound(true); // Set state to indicate user is found
-        } else {
-          toast.error('User not found.'); // Show message if user does not exist
+        try {
+            const response = await axios.post('https://serverside-api.onrender.com/api/auth/check-user', { email });
+            if (response.data.exists) {
+                toast.success(`${email} added to board`);
+                setUserFound(true); // Set state to indicate user is found
+            } else {
+                toast.error('User not found.'); // Show message if user does not exist
+            }
+        } catch (error) {
+            console.error('Error checking user:', error);
+            toast.error('Error checking user.'); // Show error message if API call fails
         }
-      } catch (error) {
-        console.error('Error checking user:', error);
-        toast.error('Error checking user.'); // Show error message if API call fails
-      }
     };
-  
+
     const handleInputChange = (event) => {
-      setEmail(event.target.value);
-      setUserFound(false); // Reset userFound state when typing
+        setEmail(event.target.value);
+        setUserFound(false); // Reset userFound state when typing
     };
-  
+
     const handleGotIt = () => {
-      useNavigate(-1); // Reload the page
+        navigate(-1); // Go back to the previous page
     };
   
     return (
