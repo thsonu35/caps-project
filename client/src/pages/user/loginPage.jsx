@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Toaster, toast } from 'react-hot-toast';
 import { useNavigate } from 'react-router-dom';
+import Register from '../user/registerPage'
 import './Register.css';
 import astronautImage from '/Artastronot.png';
 import logo from '/Backastro.png';
@@ -34,7 +35,7 @@ const LoginPage = () => {
     };
 
     const register =()=>{
-        navigate('/register')
+        Register()
     }
 
     const handleSubmit = async (e) => {
