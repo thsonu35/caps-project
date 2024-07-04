@@ -30,8 +30,7 @@ const AddUser = () => {
     };
 
     const handleGotIt = () => {
-        navigate(-1); // Go back to the previous page
-    };
+      window.history.back();    };
   
     return (
       <div className="popup-container">
