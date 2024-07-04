@@ -15,7 +15,7 @@ function App() {
                 <Route path="/" element={<LoginPage />} />
                 <Route path="/login" element={<LoginPage />} />
 
-                <Route path="/register" element={<RegisterPage />} />
+                <Route path="/register" element={<Register />} />
                 <Route path="/share/:id" element={<Sharepage/>}/>
 
 
