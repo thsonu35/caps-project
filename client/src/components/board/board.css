@@ -1,0 +1,75 @@
+.board-container {
+    padding: 0 10px;
+    position: relative;
+    height: 20px;
+    height: calc(100vh - 145px); 
+}
+
+.board {
+    display: flex;
+    overflow-x: auto;
+    height: 100%;
+}
+
+p1{
+    font-size: xx-large;
+
+}
+p{
+    padding-right: 10px;
+}
+
+.board-text{
+    font-weight: bolder;
+    padding-left: 30px;
+    align-items: center;
+    justify-content:space-between;
+    display: flex;
+}
+
+.column {
+    flex: 0 0 30%;
+    margin: 5px 30px;
+    background-color:  #eef2f5;
+    border-radius: 15px;
+    padding: 20px;
+    min-width: 340px;
+    display: flex;
+    flex-direction: column;
+}
+
+.column-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.column-sub-header{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.create-task-button {
+    font-size: 2rem;
+    cursor: pointer;
+    margin-right: 10px;
+}
+
+.collapse-icon {
+    cursor: pointer;
+}
+
+.cards {
+    margin-top: 10px;
+    overflow-y: auto;
+    max-height: 70vh; 
+}
+
+.filterbtn{
+    .filterbtn {
+        font-size: 1rem;
+        font-weight: normal;
+        padding-right: 30px;
+        display: flex;
+    }
+}

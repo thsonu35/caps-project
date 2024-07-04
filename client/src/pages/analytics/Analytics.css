@@ -1,0 +1,41 @@
+/* src/components/analytics/Analytics.css */
+
+.app {
+    display: flex;
+    height: 100vh;
+}
+
+.analytics-container {
+    padding: 20px;
+    margin-left: 250px; /* Adjusts for the sidebar width */
+    width: calc(100% - 250px); /* Ensures the container does not overlap the sidebar */
+}
+
+.analytics-cards {
+    display: flex;
+    justify-content: space-between;
+}
+
+.analytics-card {
+    background: #f9fafb;
+    border-radius: 8px;
+    padding: 20px;
+    width: 45%;
+}
+
+.analytics-card ul {
+    list-style: none;
+    padding: 0;
+}
+
+.analytics-card ul li {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 10px;
+    font-size: 16px;
+    font-weight: 500;
+}
+
+.analytics-card ul li span {
+    font-weight: 700;
+}

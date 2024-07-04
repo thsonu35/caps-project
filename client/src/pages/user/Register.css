@@ -1,0 +1,152 @@
+.body {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+.register-container {
+    display: flex;
+    width: 100vw;
+    height: 100vh;
+}
+
+.register-left {
+    flex: 3;
+    background-color: #17A2B8;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    color: #fff;
+}
+
+.register-welcome {
+    text-align: center;
+    display: flex;
+    margin-bottom: 40px;
+    flex-direction: column;
+}
+
+.register-right {
+    flex: 2;
+    background-color: #fff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.img-Div {
+    position: relative;
+    height: 400px;
+    width: 400px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.logo-img {
+    position: absolute;
+    width: 50%;
+    height: 50%;
+    object-fit: cover;
+}
+
+.astronaut-img {
+    position: relative;
+    top: 40px;
+    z-index: 1;
+    width: 90%;
+    height: auto;
+    object-fit: cover;
+}
+
+.register-form-container {
+    width: 80%;
+    max-width: 400px;
+}
+
+.onboarding-msg {
+    font-size: 15px;
+    margin-top: 0px;
+    object-fit: contain;
+}
+
+h2 {
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.input-box {
+    position: relative; /* Ensure the eye icon stays inside the input box */
+    display: flex;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.input-box input {
+    padding: 10px 10px;
+    width: 100%;
+    border: none;
+    border-radius: 5px;
+    outline: none; /* Ensure the input doesn't show an outline on focus */
+}
+
+.register-button {
+    margin-top: 20px;
+    display: inline-block;
+    width: 100%;
+    max-width: 400px;
+    padding: 12px;
+    background-color: #17A2B8;
+    color: #fff;
+    border: none;
+    border-radius: 30px;
+    cursor: pointer;
+    font-size: 18px;
+    transition: background-color 0.3s ease;
+}
+
+.register-button:hover {
+    background-color: #0079b3;
+}
+
+footer {
+    margin-top: 20px;
+    text-align: center;
+}
+
+footer a {
+    display: inline-block;
+    width: 98%;
+    max-width: 400px;
+    padding: 10px;
+    margin: 0;
+    color: #17A2B8;
+    border: 1px solid #17A2B8;
+    border-radius: 30px;
+    text-decoration: none;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+footer a:hover {
+    text-decoration: underline;
+}
+
+.inpwlogo {
+    border-radius: 7px;
+    display: flex;
+    border: 1px solid grey;
+    width: 100%;
+    padding: 1px;
+    position: relative; /* Ensure the eye icon stays inside the input box */
+}
+
+.eye-icon {
+    position: absolute;
+    right: 10px;
+    cursor: pointer;
+    width: 20px; /* Adjust the size as needed */
+    height: 20px; /* Adjust the size as needed */
+    top: 50%;
+    transform: translateY(-50%);
+}

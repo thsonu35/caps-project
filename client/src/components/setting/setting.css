@@ -1,0 +1,74 @@
+/* setting.css */
+
+.settings-container {
+    display: flex;
+    min-width: 400px; 
+}
+
+.main-content {
+    flex-grow: 1;
+    min-width: 400px; 
+    margin-left: 250px; 
+}
+
+.settings-title {
+    margin-bottom: 30px; 
+}
+
+.settings-form {
+    display: flex;
+    flex-direction: column;
+   width: 400px;
+    gap: 30px; 
+}
+
+.input-group {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.icon {
+    position: absolute;
+    left: 10px;
+    color: grey;
+    pointer-events: none;
+}
+
+.form-input {
+    width: 400px; 
+    padding: 12px 40px; 
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 16px;
+    color: grey;
+}
+
+.form-input::placeholder {
+    color: grey;
+}
+
+.toggle-password-icon {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: grey;
+    cursor: pointer;
+}
+
+.update-button {
+    width: 400px;
+    padding: 12px 20px; 
+    border-radius: 30px; 
+    background-color: #17A2B8; 
+    border: none;
+    color: white;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    margin-top: 20px; 
+}
+
+.update-button:hover {
+    background-color: #117A8B; }
