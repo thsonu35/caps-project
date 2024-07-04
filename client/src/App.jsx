@@ -13,14 +13,14 @@ function App() {
         <BrowserRouter>
             <Routes>
                 <Route path="/" element={<LoginPage />} />
-                <Route path="https://serverside-api.onrender.com/api/auth/register/login" element={<LoginPage />} />
+                <Route path="/login" element={<LoginPage />} />
 
-                <Route path="https://serverside-api.onrender.com/api/auth/register/register" element={<RegisterPage />} />
-                <Route path="https://serverside-api.onrender.com/api/auth/register/share/:id" element={<Sharepage/>}/>
+                <Route path="/register" element={<RegisterPage />} />
+                <Route path="/share/:id" element={<Sharepage/>}/>
 
 
                 <Route 
-                    path="https://serverside-api.onrender.com/api/auth/register/dashboard" 
+                    path="/dashboard" 
                     element={
                         <ProtectedRoute>
                             <Dashboard />
@@ -28,7 +28,7 @@ function App() {
                     } 
                 />
                 <Route 
-                    path="https://serverside-api.onrender.com/api/auth/register/analytics" 
+                    path="/analytics" 
                     element={
                         <ProtectedRoute>
                             <Analytics />
@@ -36,7 +36,7 @@ function App() {
                     } 
                 />
                 <Route 
-                    path="https://serverside-api.onrender.com/api/auth/register/setting" 
+                    path="/setting" 
                     element={
                         <ProtectedRoute>
                             <Settings />
