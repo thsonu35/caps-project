@@ -23,7 +23,7 @@ const TodoCard = ({ task, onEdit, onDelete, onMove, onUpdateCheckedCount, collap
   };
 
   const copySharelink = (urllink) => {
-    const fullUrl = `${window.location.origin}${urllink}`;
+    const fullUrl = `${urllink}`;
     navigator.clipboard.writeText(fullUrl).then(() => {
       toast.success("Share link copied");
     }).catch(err => {
