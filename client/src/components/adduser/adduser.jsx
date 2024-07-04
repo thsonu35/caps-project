@@ -3,7 +3,6 @@ import axios from 'axios';
 import { toast } from 'react-hot-toast';
 import 'react-toastify/dist/ReactToastify.css';
 import './adduser.css'; // Import CSS for styling
-import { Navigate } from 'react-router-dom';
 
 const AddUser = () => {
     const [email, setEmail] = useState('');

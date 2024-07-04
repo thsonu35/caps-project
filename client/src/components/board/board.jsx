@@ -72,7 +72,7 @@ const Board = () => {
       if (!response.ok) {
         throw new Error('Failed to save task');
       }
-
+      handleAssignCancel()
       const savedTask = await response.json();
       notify(taskData._id ? "Task Updated" : "Task Created");
 
