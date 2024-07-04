@@ -3,6 +3,7 @@ import axios from 'axios';
 import { toast } from 'react-hot-toast';
 import 'react-toastify/dist/ReactToastify.css';
 import './adduser.css'; // Import CSS for styling
+import { Navigate } from 'react-router-dom';
 
 const AddUser = () => {
     const [email, setEmail] = useState('');
@@ -29,7 +30,7 @@ const AddUser = () => {
     };
   
     const handleGotIt = () => {
-      window.location.reload(); // Reload the page
+      Navigate('/dashboard') // Reload the page
     };
   
     return (

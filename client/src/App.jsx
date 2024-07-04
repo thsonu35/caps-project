@@ -1,7 +1,7 @@
 import React from 'react';
 import { BrowserRouter, Route, Routes  } from 'react-router-dom';
 import LoginPage from './pages/user/loginPage';
-import RegisterPage from './pages/user/registerPage';
+import Register from './pages/user/registerPage';
 import { Toaster } from "react-hot-toast";
 import Dashboard from './pages/dashboard/dashboard';
 import Analytics from './pages/analytics/Analytics';
