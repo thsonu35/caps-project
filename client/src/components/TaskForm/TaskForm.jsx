@@ -78,7 +78,7 @@ const TaskForm = ({ task: initialTask, onSave, onCancel }) => {
 
       console.log('Task successfully saved:', response.data);
       onSave(response.data);
-      useNavigate('/dashboard')
+      onCancel()
     } catch (error) {
       console.error('Error saving task:', error.response ? error.response.data : error.message);
     }
