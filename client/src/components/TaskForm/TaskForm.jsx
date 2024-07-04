@@ -67,11 +67,11 @@ const TaskForm = ({ task: initialTask, onSave, onCancel }) => {
       let response;
 
       if (initialTask) {
-        response = await axios.put(`http://localhost:3000/api/update/${initialTask._id}`, updatedTask, { headers });
+        response = await axios.put(`https://serverside-api.onrender.com/api/update/${initialTask._id}`, updatedTask, { headers });
         toast.success('Task updated');
 
       } else {
-        response = await axios.post('http://localhost:3000/api/tasks', updatedTask, { headers });
+        response = await axios.post('https://serverside-api.onrender.com/api/tasks', updatedTask, { headers });
       }
 
       console.log('Task successfully saved:', response.data);

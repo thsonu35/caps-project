@@ -10,7 +10,7 @@ const Analytics = () => {
     const fetchTaskData = async () => {
       try {
         const token = localStorage.getItem('token');
-        const response = await axios.get(`http://localhost:3000/api/tasks`, {
+        const response = await axios.get(`https://serverside-api.onrender.com/api/tasks`, {
             method: 'get',
             headers: {
               'Content-Type': 'application/json',

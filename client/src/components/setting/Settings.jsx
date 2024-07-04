@@ -26,7 +26,7 @@ const Settings = () => {
             }
 
             const response = await axios.put(
-                'http://localhost:3000/api/auth/updatepassword',
+                'https://serverside-api.onrender.com/api/auth/updatepassword',
                 { oldPassword, newPassword },
                 {
                     headers: {

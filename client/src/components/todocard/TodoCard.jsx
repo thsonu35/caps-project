@@ -44,7 +44,7 @@ const TodoCard = ({ task, onEdit, onDelete, onMove, onUpdateCheckedCount, collap
       const taskId = task._id; // Assuming taskId is available in props or context
 
       const response = await axios.put(
-        `http://localhost:3000/api/tasks/${taskId}/checklist/${index}`,
+        `https://serverside-api.onrender.com/api/tasks/${taskId}/checklist/${index}`,
         { checked: updatedList[index].checked },
         {
           headers: {
