@@ -45,7 +45,7 @@ const Register = () => {
         }
 
         try {
-            const response = await axios.post('http://localhost:3000/api/auth/register', { name, email, password }, {
+            const response = await axios.post('https://serverside-api.onrender.com/api/auth/register', { name, email, password }, {
                 headers: {
                     'Content-Type': 'application/json'
                 }
