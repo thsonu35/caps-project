@@ -72,18 +72,19 @@ const Board = () => {
       if (!response.ok) {
         throw new Error('Failed to save task');
       }
-      handleAssignCancel()
+
       const savedTask = await response.json();
       notify(taskData._id ? "Task Updated" : "Task Created");
 
       setTasks(prevTasks => {
-        const updatedTasks = {...prevTasks};
+        const updatedTasks = [...prevTasks];
         if (taskData._id) {
-          updatedTasks.data = updatedTasks.data.map(task => 
-            task._id === savedTask._id ? savedTask : task
-          );
+          const index = updatedTasks.findIndex(task => task._id === savedTask._id);
+          if (index !== -1) {
+            updatedTasks[index] = savedTask;
+          }
         } else {
-          updatedTasks.data = [...updatedTasks.data, savedTask];
+          updatedTasks.push(savedTask);
         }
         return updatedTasks;
       });
@@ -136,12 +137,14 @@ const Board = () => {
       <Toaster />
       
       <div className="select-container">
-        <l className="board-text"><p1>Board <img src={assign} alt="" onClick={openAssignPopup} /></p1>
-        <p className='filterbtn'>  <select id="timeframe" name="timeframe" onChange={handleTimeframeChange}>
-        <option value="thisWeek">This Week</option>
-          <option value="today">Today</option>
-          <option value="thisMonth">This Month</option>
-        </select></p></l>
+        <l className="board-text"><p1>Board <img src={assign} alt="assign" onClick={openAssignPopup} /></p1>
+        <p className='filterbtn'>  
+          <select id="timeframe" name="timeframe" onChange={handleTimeframeChange}>
+            <option value="thisWeek">This Week</option>
+            <option value="today">Today</option>
+            <option value="thisMonth">This Month</option>
+          </select>
+        </p></l>
       
       </div>
 
