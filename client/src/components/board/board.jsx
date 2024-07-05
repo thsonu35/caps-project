@@ -21,8 +21,6 @@ const Board = () => {
   const [showAddUser, setShowAddUser] = useState(false);
   const [assignEmail, setAssignEmail] = useState('');
   const [assignError, setAssignError] = useState('');
-  const [isAddUserVisible, setIsAddUserVisible] = useState(false);
-
 
   const toggleCollapse = () => {
     setCollapsedAll(!collapsedAll);
@@ -97,13 +95,37 @@ const Board = () => {
     }
   };
 
-  const handleShowAddUser = () => {
-    setIsAddUserVisible(true);
-};
+  const handleAssign = async (email) => {
+    try {
+      // Call backend API to check if user with `email` exists
+      const response = await fetch(`https://serverside-api.onrender.com/api/users/${email}`, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
 
-const handleHideAddUser = () => {
-    setIsAddUserVisible(false);
-};
+      if (!response.ok) {
+        throw new Error('User not found');
+      }
+
+      // If user exists, perform assignment logic
+      // Example logic: update task with assigned user
+      // Replace with your specific logic here
+
+      setAssignError('');
+      setShowAddUser(false);
+    } catch (error) {
+      setAssignError('User not found');
+      console.error('Error assigning user:', error);
+    }
+  };
+
+  const handleAssignCancel = () => {
+    setShowAddUser(false);
+    setAssignEmail('');
+    setAssignError('');
+  };
 
   const openAssignPopup = () => {
     setShowAddUser(true);
@@ -114,8 +136,7 @@ const handleHideAddUser = () => {
       <Toaster />
       
       <div className="select-container">
-        <l className="board-text"><p1>Board <img src={assign} alt="" onClick={handleShowAddUser} >            {isAddUserVisible && <AddUser onCancel={handleHideAddUser} />}
-        </img></p1>
+        <l className="board-text"><p1>Board <img src={assign} alt="" onClick={openAssignPopup} /></p1>
         <p className='filterbtn'>  <select id="timeframe" name="timeframe" onChange={handleTimeframeChange}>
         <option value="thisWeek">This Week</option>
           <option value="today">Today</option>
