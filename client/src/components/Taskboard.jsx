@@ -1,65 +1,220 @@
-import React from 'react';
-import TodoCard from './todocard/TodoCard';
+import React, { useState, useEffect } from 'react';
+import TodoCard from '../todocard/TodoCard';
+import TaskForm from '../TaskForm/TaskForm';
+import colaps from '../../../public/codicon.png';
+import './board.css';
+import Tasks from '../Taskboard';
+import { getAllTasks } from '../../services/task';
+import { Toaster, toast } from 'react-hot-toast';
+import 'react-toastify/dist/ReactToastify.css';
+import assign from '/Group 3779addcolab.png';
+import AddUser from '../adduser/adduser';
 
-export default function Tasks({ id, task, sendDataToParent, onEdit, collapsedAll, toggleCollapse }) {
+const Board = () => {
+  const [tasks, setTasks] = useState([]);
+  const [change, setChange] = useState(" ");
+  const notify = (data) => toast.success("Status update");
+  const [timeframe, setTimeframe] = useState();
+  const [showTaskForm, setShowTaskForm] = useState(false);
+  const [currentTask, setCurrentTask] = useState(null);
+  const [collapsedAll, setCollapsedAll] = useState(true);
+  const [showAddUser, setShowAddUser] = useState(false);
+  const [assignEmail, setAssignEmail] = useState('');
+  const [assignError, setAssignError] = useState('');
 
-  const onDelete = async (taskId) => {
+  const toggleCollapse = () => {
+    setCollapsedAll(!collapsedAll);
+  };
+
+  const [collapsedColumns, setCollapsedColumns] = useState({
+    backlog: false,
+    todo: false,
+    inProgress: false,
+    done: false,
+  });
+
+  useEffect(() => {
+    const fetchTasks = async () => {
+      const tasksData = await getAllTasks(timeframe);
+      if (tasksData) {
+        setTasks(tasksData);
+      } else {
+        setTasks([]);
+      }
+    };
+    fetchTasks();
+  }, [change, timeframe]);
+
+  const handleTimeframeChange = (event) => {
+    setTimeframe(event.target.value);
+  };
+
+  function handleDataFromChild(data) {
+    setChange(data);
+    notify(`Status changed to ${data}`);
+  }
+
+  const handleSaveTask = async (taskData) => {
     try {
-      const token = localStorage.getItem('token');
-      const response = await fetch(`https://serverside-api.onrender.com/api/tasks/${taskId}`, {
-        method: 'DELETE',
+      const url = taskData._id 
+        ? `https://serverside-api.onrender.com/api/tasks/${taskData._id}` 
+        : 'https://serverside-api.onrender.com/api/tasks';
+      const method = taskData._id ? 'PUT' : 'POST';
+
+      const response = await fetch(url, {
+        method: method,
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `${token}`
-        }
+        },
+        body: JSON.stringify(taskData),
       });
 
       if (!response.ok) {
-        throw new Error('Failed to delete task');
+        throw new Error('Failed to save task');
       }
 
-      sendDataToParent();
-      console.log('Task deleted successfully', taskId);
+      const savedTask = await response.json();
+      notify(taskData._id ? "Task Updated" : "Task Created");
+
+      setTasks(prevTasks => {
+        const updatedTasks = [...prevTasks];
+        if (taskData._id) {
+          const index = updatedTasks.findIndex(task => task._id === savedTask._id);
+          if (index !== -1) {
+            updatedTasks[index] = savedTask;
+          }
+        } else {
+          updatedTasks.push(savedTask);
+        }
+        return updatedTasks;
+      });
+
+      setShowTaskForm(false);
+      setCurrentTask(null);
     } catch (error) {
-      console.error('Error deleting task:', error);
+      console.error('Error saving task:', error);
     }
   };
 
-  const onMove = async (taskId, status) => {
+  const handleAssign = async (email) => {
     try {
-      const token = localStorage.getItem('token');
-      const response = await fetch('https://serverside-api.onrender.com/api/tasks/movetask', {
-        method: 'POST',
+      const response = await fetch(`https://serverside-api.onrender.com/api/users/${email}`, {
+        method: 'GET',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `${token}`
         },
-        body: JSON.stringify({ taskId, status }),
       });
 
       if (!response.ok) {
-        throw new Error('Failed to move task');
+        throw new Error('User not found');
       }
 
-      sendDataToParent(status);
-      console.log('Task moved successfully', taskId, status);
+      setAssignError('');
+      setShowAddUser(false);
     } catch (error) {
-      console.error('Error moving task:', error);
+      setAssignError('User not found');
+      console.error('Error assigning user:', error);
     }
+  };
+
+  const handleAssignCancel = () => {
+    setShowAddUser(false);
+    setAssignEmail('');
+    setAssignError('');
+  };
+
+  const openAssignPopup = () => {
+    setShowAddUser(true);
   };
 
   return (
-    <div>
-      <TodoCard
-        key={task._id}
-        task={task}
-        onEdit={() => onEdit(task)}
-        onDelete={() => onDelete(task._id)}
-        onMove={(status) => onMove(task._id, status)}
-        sendDataToParent={sendDataToParent}
-        collapsedAll={collapsedAll} // Pass collapsedAll
-        toggleCollapse={toggleCollapse} // Pass toggleCollapse
-      />
+    <div className="board-container">
+      <Toaster />
+      
+      <div className="select-container">
+        <div className="board-text">
+          <p1>Board <img src={assign} alt="assign" onClick={openAssignPopup} /></p1>
+          <div className='filterbtn'>  
+            <select id="timeframe" name="timeframe" onChange={handleTimeframeChange}>
+              <option value="thisWeek">This Week</option>
+              <option value="today">Today</option>
+              <option value="thisMonth">This Month</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <div className="board">
+        {['BACKLOG', 'TO DO', 'IN PROGRESS', 'DONE'].map(column => (
+          <div className="column" key={column}>
+            <div className="column-header">
+              <h3>{column}</h3>
+              <div className="column-sub-header">
+                {column === 'TO DO' && (
+                  <span className="create-task-button" onClick={() => { setShowTaskForm(true); setCurrentTask(null); }}>
+                    +
+                  </span>
+                )}
+                <span className="collapse-icon" onClick={toggleCollapse}>
+                  <img 
+                    src={colaps} 
+                    alt="collapse"
+                  />
+                </span>
+              </div>
+            </div>
+            
+            {!collapsedColumns[column.toLowerCase()] && (
+              <div className="cards">
+                {tasks.length === 0 ? (
+                  <p>No tasks found</p>
+                ) : (
+                  tasks.data.map((task) => (
+                    task.status === column && 
+                    <Tasks 
+                      key={task._id}
+                      id={task._id} 
+                      task={task}  
+                      sendDataToParent={handleDataFromChild}
+                      onEdit={() => {
+                        setShowTaskForm(true);
+                        setCurrentTask(task);
+                      }}
+                      collapsedAll={collapsedAll} 
+                      toggleCollapse={toggleCollapse}
+                      onDelete={() => handleDelete(task._id)}
+                    />
+                  ))
+                )}
+              </div>
+            )}
+          </div>
+        ))}
+      </div>
+
+      {showTaskForm && (
+        <div className="task-form-overlay">
+          <div className="task-form-container">
+            <TaskForm 
+              task={currentTask} 
+              onSave={handleSaveTask} 
+              onCancel={() => {
+                setShowTaskForm(false);
+                setCurrentTask(null);
+              }} 
+            />
+          </div>
+        </div>
+      )}
+
+      {showAddUser && (
+        <AddUser
+          onConfirm={handleAssign}
+          onCancel={handleAssignCancel}
+        />
+      )}
     </div>
   );
-}
+};
+
+export default Board;
