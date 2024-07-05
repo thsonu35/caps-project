@@ -2,13 +2,10 @@ import React, { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
 import { toast } from 'react-hot-toast';
 import './adduser.css'; // Import CSS for styling
-import { useNavigate } from 'react-router-dom';
 
-const AddUser = () => {
+const AddUser = ({ onCancel }) => {
     const [email, setEmail] = useState('');
     const [userFound, setUserFound] = useState(false); // State to track if user is found
-    const [isCardVisible, setIsCardVisible] = useState(true); // State to control visibility of the card
-    const navigate = useNavigate(); // Initialize useNavigate
     const cardRef = useRef(null); // Ref to the card element
 
     const handleAddUser = async () => {
@@ -31,13 +28,9 @@ const AddUser = () => {
         setUserFound(false); // Reset userFound state when typing
     };
 
-    const handleGotIt = () => {
-        window.history.back();
-    };
-
     const handleClickOutside = (event) => {
         if (cardRef.current && !cardRef.current.contains(event.target)) {
-            setIsCardVisible(false);
+            onCancel(); // Call the onCancel prop function to hide the card
         }
     };
 
@@ -48,18 +41,16 @@ const AddUser = () => {
         };
     }, []);
 
-    if (!isCardVisible) return null; // Don't render the card if it's not visible
-
     return (
         <div className="popup-container">
             <div className="popup-content" ref={cardRef}>
-                {!userFound && (
+                {!userFound ? (
                     <>
                         <p>Add people to the board</p>
                         <input className='oinput' type="email" placeholder='Input the Email' name='email' value={email} onChange={handleInputChange} />
                         <div className="cta-btns">
                             <div>
-                                <button className="cancel" onClick={handleGotIt}>
+                                <button className="cancel" onClick={onCancel}>
                                     Cancel
                                 </button>
                                 <button className="confirm" onClick={handleAddUser}>
@@ -68,11 +59,10 @@ const AddUser = () => {
                             </div>
                         </div>
                     </>
-                )}
-                {userFound && (
+                ) : (
                     <div className="user-found">
                         <p>{email} added to board</p>
-                        <button className="got-it" onClick={handleGotIt}>Ok, Got it</button>
+                        <button className="got-it" onClick={onCancel}>Ok, Got it</button>
                     </div>
                 )}
             </div>
