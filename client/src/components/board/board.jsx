@@ -212,7 +212,10 @@ const Board = () => {
       {showAddUser && (
         <AddUser
           onConfirm={handleAssign}
-          onCancel={handleAssignCancel}
+          onCancel={()=> {
+            setsetShowAddUser(false);
+            handleAssignCancel();
+          }}
         />
       )}
 
