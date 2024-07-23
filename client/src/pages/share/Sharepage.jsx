@@ -12,7 +12,7 @@ const Sharepage = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch(`http://localhost:3000/api/share/${id}`);
+        const response = await fetch(`https://caps-project-8ytf.onrender.com/api/share/${id}`);
         if (!response.ok) {
           throw new Error('Network response was not ok');
         }

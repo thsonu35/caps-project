@@ -42,7 +42,7 @@ const TodoCard = ({ task, onEdit, onDelete, onMove, onUpdateCheckedCount, collap
       const taskId = task._id;
 
       const response = await axios.put(
-        `http://localhost:3000/api/tasks/${taskId}/checklist/${index}`,
+        `https://caps-project-8ytf.onrender.com/api/tasks/${taskId}/checklist/${index}`,
         { checked: updatedList[index].checked },
         {
           headers: {
@@ -73,7 +73,6 @@ const TodoCard = ({ task, onEdit, onDelete, onMove, onUpdateCheckedCount, collap
   };
 
   const statusOptions = ['TO DO', 'IN PROGRESS', 'DONE', 'BACKLOG'];
-  const availableStatusOptions = statusOptions.filter(status => status !== task.status);
 
   const isPastDue = () => {
     const dueDate = new Date(task.dueDate);

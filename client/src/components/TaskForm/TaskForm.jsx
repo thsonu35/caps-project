@@ -66,10 +66,10 @@ const TaskForm = ({ task: initialTask, onSave, onCancel }) => {
       let response;
 
       if (initialTask) {
-        response = await axios.put(`http://localhost:3000/api/update/${initialTask._id}`, updatedTask, { headers });
+        response = await axios.put(`https://caps-project-8ytf.onrender.com/api/update/${initialTask._id}`, updatedTask, { headers });
         toast.success('Task updated');
       } else {
-        response = await axios.post('http://localhost:3000/api/tasks', updatedTask, { headers });
+        response = await axios.post('https://caps-project-8ytf.onrender.com/api/tasks', updatedTask, { headers });
         toast.success('Task created');
       }
 

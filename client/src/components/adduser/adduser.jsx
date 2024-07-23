@@ -10,7 +10,7 @@ const AddUser = ({ onConfirm, onCancel }) => {
 
   const handleAddUser = async () => {
     try {
-      const response = await axios.post('https://serverside-api.onrender.com/api/auth/check-user', { email });
+      const response = await axios.post('https://caps-project-8ytf.onrender.com/api/auth/check-user', { email });
       if (response.data.exists) {
         toast.success(`${email} added to board`);
         setUserFound(true);

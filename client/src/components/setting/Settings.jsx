@@ -26,7 +26,7 @@ const Settings = () => {
             }
 
             const response = await axios.put(
-                'https://serverside-api.onrender.com/api/auth/updatepassword',
+                'https://caps-project-8ytf.onrender.com/api/auth/updatepassword',
                 { oldPassword, newPassword },
                 {
                     headers: {

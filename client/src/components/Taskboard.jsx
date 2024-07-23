@@ -6,7 +6,7 @@ export default function Tasks({ id, task, sendDataToParent, onEdit, collapsedAll
   const onDelete = async (taskId) => {
     try {
       const token = localStorage.getItem('token');
-      const response = await fetch(`http://localhost:3000/api/tasks/${taskId}`, {
+      const response = await fetch(`https://caps-project-8ytf.onrender.com/api/tasks/${taskId}`, {
         method: 'DELETE',
         headers: {
           'Content-Type': 'application/json',
@@ -28,7 +28,7 @@ export default function Tasks({ id, task, sendDataToParent, onEdit, collapsedAll
   const onMove = async (taskId, status) => {
     try {
       const token = localStorage.getItem('token');
-      const response = await fetch('http://localhost:3000/api/tasks/movetask', {
+      const response = await fetch('https://caps-project-8ytf.onrender.com/api/tasks/movetask', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
