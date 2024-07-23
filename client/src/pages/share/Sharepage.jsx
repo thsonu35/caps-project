@@ -1,34 +1,45 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-import './share.css'; // Import your custom CSS file
-import logo from '../../../public/codesandboxpromanagelogo.png';
+import logo from '/codesandboxpromanagelogo.png'; // Ensure the correct path for your logo
+import './share.css'; // Ensure you have a CSS file for styling
 
 const Sharepage = () => {
-  const { id } = useParams(); // Get the taskId from URL parameters
-  const [taskData, setTaskData] = useState(null);
+  const { id } = useParams();
+  const [data, setData] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
-    const fetchTaskData = async () => {
+    const fetchData = async () => {
       try {
-        const response = await fetch(`https://serverside-api.onrender.com/api/share/${id}`);
+        const response = await fetch(`http://localhost:3000/api/share/${id}`);
         if (!response.ok) {
-          throw new Error('Failed to fetch task data');
+          throw new Error('Network response was not ok');
         }
-        const data = await response.json();
-        setTaskData(data);
+        const result = await response.json();
+        setData(result);
       } catch (error) {
-        console.error('Error fetching task data:', error);
+        setError(error.message);
+      } finally {
+        setLoading(false);
       }
     };
-
-    fetchTaskData();
+    fetchData();
   }, [id]);
 
-  if (!taskData) {
+  if (loading) {
     return <div>Loading...</div>;
   }
 
-  const { taskDetails } = taskData;
+  if (error) {
+    return <div>Error: {error}</div>;
+  }
+
+  if (!data || !data.taskDetails) {
+    return <div>No task data available</div>;
+  }
+
+  const { taskDetails } = data;
 
   return (
     <div className="share-page-container">
@@ -41,20 +52,18 @@ const Sharepage = () => {
         </div>
         <div className="task-details">
           <div className="priority-menu">
-          <div className='priority-label'>
-        <p className={`priority-label ${taskDetails.priority.toLowerCase()}-priority`}>
-
-</p>
-{taskDetails.priority === 'HIGH' && <span className='priority-label'>HIGH PRIORITY</span>}
-  {taskDetails.priority === 'MODERATE' && <span className='priority-label'>MODERATE PRIORITY</span>}
-  {taskDetails.priority === 'LOW' && <span className='priority-label'>LOW PRIORITY</span>}
-  </div >          </div>
+            <div className={`priority-label ${taskDetails.priority.toLowerCase()}-priority`}>
+              {taskDetails.priority === 'HIGH' && <span className='priority-label'>HIGH PRIORITY</span>}
+              {taskDetails.priority === 'MODERATE' && <span className='priority-label'>MODERATE PRIORITY</span>}
+              {taskDetails.priority === 'LOW' && <span className='priority-label'>LOW PRIORITY</span>}
+            </div>
+          </div>
           <p className="title">{taskDetails.title}</p>
 
           <div className="checklist-toggle-container">
             <p className="checklist-head">
               <span>
-                Checklist ({taskDetails.checklist.filter((item) => item.checked).length} / {taskDetails.checklist.length})
+                Checklist ({taskDetails.checklist.filter(item => item.checked).length} / {taskDetails.checklist.length})
               </span>
             </p>
           </div>
@@ -68,8 +77,8 @@ const Sharepage = () => {
           </div>
           {taskDetails.dueDate && (
             <p className="due-date">
-              <span className="date-label">Due Date</span>
-              <span className='date-value exceeded'>
+              <span className="date-label">Due Date:</span>
+              <span className='date-value'>
                 {new Date(taskDetails.dueDate).toLocaleDateString('en-US', {
                   month: 'short', // Display month as abbreviated name (e.g., Jan, Feb)
                   day: 'numeric' // Display day as number (e.g., 2)
@@ -77,7 +86,6 @@ const Sharepage = () => {
               </span>
             </p>
           )}
-
         </div>
       </section>
     </div>

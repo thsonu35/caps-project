@@ -1,0 +1,39 @@
+/* Dashboard.css */
+.dashboard-container {
+    display: flex;
+}
+
+.main-content {
+    flex: 1;
+    padding: 20px;
+    background-color: #f4f4f4;
+    overflow: auto;
+}
+
+.dashboard-container .sidebar {
+    width: 250px;
+    background-color: #fff;
+    border-right: 1px solid #ddd;
+}
+
+.dashboard-container .main-content .header {
+    background-color: #fff;
+    padding: 10px;
+    border-bottom: 1px solid #ddd;
+}
+
+.dashboard-container .main-content .board {
+    padding: 20px;
+}
+
+/* Add styles for TaskForm when shown */
+.task-form {
+    position: fixed;
+    top: 0;
+    right: 0;
+    width: 400px;
+    background-color: #fff;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    padding: 20px;
+    z-index: 1000;
+}

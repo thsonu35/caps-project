@@ -5,7 +5,6 @@ import { FaTrashAlt } from 'react-icons/fa';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import { Toaster, toast } from 'react-hot-toast';
-import { useNavigate } from 'react-router-dom';
 
 const TaskForm = ({ task: initialTask, onSave, onCancel }) => {
   const [task, setTask] = useState({
@@ -15,7 +14,6 @@ const TaskForm = ({ task: initialTask, onSave, onCancel }) => {
     dueDate: initialTask?.dueDate ? new Date(initialTask.dueDate) : null,
     checklist: initialTask?.checklist || [],
   });
-const navigate = useNavigate();
 
   const [isTitleValid, setIsTitleValid] = useState(true);
 
@@ -60,7 +58,6 @@ const navigate = useNavigate();
 
     try {
       const token = localStorage.getItem('token');
-
       const headers = {
         Authorization: token,
         'Content-Type': 'application/json',
@@ -69,17 +66,18 @@ const navigate = useNavigate();
       let response;
 
       if (initialTask) {
-        response = await axios.put(`https://serverside-api.onrender.com/api/update/${initialTask._id}`, updatedTask, { headers });
+        response = await axios.put(`http://localhost:3000/api/update/${initialTask._id}`, updatedTask, { headers });
         toast.success('Task updated');
-
       } else {
-        response = await axios.post('https://serverside-api.onrender.com/api/tasks', updatedTask, { headers });
+        response = await axios.post('http://localhost:3000/api/tasks', updatedTask, { headers });
+        toast.success('Task created');
       }
 
       console.log('Task successfully saved:', response.data);
-      navigate('/dashboard');
-      {onCancel   }
-      toast.success('Task successfully saved');
+      onSave(response.data);
+      
+      // Refresh the page after saving
+      window.location.reload(); // Refresh the current page
     } catch (error) {
       console.error('Error saving task:', error.response ? error.response.data : error.message);
     }
@@ -97,7 +95,7 @@ const navigate = useNavigate();
     <div className="task-form">
       <Toaster />
       <div className="form-group">
-        <label>Title <k>*</k> </label>
+        <label>Title*</label>
         <input
           type="text"
           value={task.title}
@@ -115,31 +113,32 @@ const navigate = useNavigate();
         />
         {!isTitleValid && <div className="error-message">Title is required</div>}
       </div>
-
       <div className="form-group priority-options">
-        <label>Select Priority <k>*</k> :</label>
+        <label>Select Priority* :</label>
         <button
           className={`priority-button high ${task.priority === 'HIGH' ? 'active' : ''}`}
           onClick={() => setTask({ ...task, priority: 'HIGH' })}
-        ><div className="priority-icon"></div>
+        >
+          <div className="priority-icon"></div>
           High Priority
         </button>
         <button
           className={`priority-button moderate ${task.priority === 'MODERATE' ? 'active' : ''}`}
           onClick={() => setTask({ ...task, priority: 'MODERATE' })}
-        ><div className="priority-icon"></div>
+        >
+          <div className="priority-icon"></div>
           Moderate Priority
         </button>
         <button
           className={`priority-button low ${task.priority === 'LOW' ? 'active' : ''}`}
           onClick={() => setTask({ ...task, priority: 'LOW' })}
-        ><div className="priority-icon"></div>
+        >
+          <div className="priority-icon"></div>
           Low Priority
         </button>
       </div>
-
       <div className="form-group">
-        <label>Checklist <k>*</k>  ({checkedCount}/{task.checklist.length})</label>
+        <label>Checklist * ({checkedCount}/{task.checklist.length})</label>
         <div className="checklist-container">
           {task.checklist.map((item, index) => (
             <div key={index} className="checklist-item">
@@ -178,16 +177,11 @@ const navigate = useNavigate();
           <button className="add-button" onClick={addChecklistItem}>+ Add</button>
         </div>
       </div>
-
       <div className="form-group button-group">
         <div>
           <DatePicker
             selected={task.dueDate}
-            onChange={(date) => {
-              const adjustedDate = new Date(date);
-              adjustedDate.setDate(adjustedDate.getDate() + 1);
-              setTask({ ...task, dueDate: adjustedDate });
-            }}
+            onChange={(date) => setTask({ ...task, dueDate: date })}
             customInput={<CustomDateButton />}
             dateFormat="yyyy-MM-dd"
           />

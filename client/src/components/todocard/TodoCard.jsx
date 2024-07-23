@@ -4,7 +4,6 @@ import './TodoCard.css';
 import axios from 'axios';
 import { Toaster, toast } from 'react-hot-toast';
 import PopupComponent from '../popup/popup'; // Adjust path as per your file structure
-
 import menuIcon from '../../../public/Group 544menu.png';
 
 const TodoCard = ({ task, onEdit, onDelete, onMove, onUpdateCheckedCount, collapsedAll }) => {
@@ -23,7 +22,7 @@ const TodoCard = ({ task, onEdit, onDelete, onMove, onUpdateCheckedCount, collap
   };
 
   const copySharelink = (urllink) => {
-    const fullUrl = `${urllink}`;
+    const fullUrl = `${window.location.origin}${urllink}`;
     navigator.clipboard.writeText(fullUrl).then(() => {
       toast.success("Share link copied");
     }).catch(err => {
@@ -39,12 +38,11 @@ const TodoCard = ({ task, onEdit, onDelete, onMove, onUpdateCheckedCount, collap
       updatedList[index].checked = !updatedList[index].checked;
       setUpdatedChecklist(updatedList);
 
-      // Update the backend/database with the new checklist item
       const token = localStorage.getItem('token'); // Assuming you have a token stored in localStorage
-      const taskId = task._id; // Assuming taskId is available in props or context
+      const taskId = task._id;
 
       const response = await axios.put(
-        `https://serverside-api.onrender.com/api/tasks/${taskId}/checklist/${index}`,
+        `http://localhost:3000/api/tasks/${taskId}/checklist/${index}`,
         { checked: updatedList[index].checked },
         {
           headers: {
@@ -55,23 +53,18 @@ const TodoCard = ({ task, onEdit, onDelete, onMove, onUpdateCheckedCount, collap
       );
 
       console.log('Task checklist item updated:', response.data);
-      // Optionally, you can handle the response or trigger any UI updates
       onUpdateCheckedCount(taskId, updatedList);
     } catch (error) {
       console.error('Error updating checklist item:', error);
-      // Optionally handle error states or display a message to the user
     } finally {
       setLoading(false); // Stop loading
-      window.location.reload(); // Reload page after API call completes
     }
   };
-
-  const checkedCount = task.checklist.filter((item) => item.checked).length;
 
   const handleDelete = async () => {
     try {
       setLoading(true); // Start loading
-      await onDelete(task._id); // Call onDelete with task ID
+      await onDelete(task._id);
     } catch (error) {
       console.error('Error deleting task:', error);
     } finally {
@@ -82,14 +75,12 @@ const TodoCard = ({ task, onEdit, onDelete, onMove, onUpdateCheckedCount, collap
   const statusOptions = ['TO DO', 'IN PROGRESS', 'DONE', 'BACKLOG'];
   const availableStatusOptions = statusOptions.filter(status => status !== task.status);
 
-  // Function to check if the due date has passed
   const isPastDue = () => {
     const dueDate = new Date(task.dueDate);
     const currentDate = new Date();
     return dueDate < currentDate;
   };
 
-  // Function to get month name and date
   const getMonthAndDate = () => {
     const dueDate = new Date(task.dueDate);
     const month = dueDate.toLocaleString('default', { month: 'short' });
@@ -97,31 +88,30 @@ const TodoCard = ({ task, onEdit, onDelete, onMove, onUpdateCheckedCount, collap
     return `${month} ${date}`;
   };
 
-  // Determine the background color class
   let backgroundColorClass = '';
   if (task.status === 'DONE') {
     backgroundColorClass = 'done';
   } else if (isPastDue()) {
     backgroundColorClass = 'past-due';
   } else {
-    backgroundColorClass = 'grey-bg'; // Default grey background
+    backgroundColorClass = 'grey-bg';
   }
 
   const openDeletePopup = () => {
-    setShowPopup(true); // Show the popup when delete is clicked
+    setShowPopup(true);
   };
 
   const closePopup = () => {
-    setShowPopup(false); // Close the popup
+    setShowPopup(false);
   };
 
   const handleDeleteConfirm = async () => {
-    await handleDelete(); // Confirm delete and call handleDelete
-    closePopup(); // Close the popup after deletion
+    await handleDelete();
+    closePopup();
   };
 
   const handleDeleteCancel = () => {
-    setShowPopup(false); // Close the popup if user cancels delete
+    setShowPopup(false);
   };
 
   return (
@@ -131,16 +121,14 @@ const TodoCard = ({ task, onEdit, onDelete, onMove, onUpdateCheckedCount, collap
           <p>Loading...</p>
         </div>
       )}
-      <aside className="card-content">
+      <aside className={`card-content ${loading ? 'loading' : ''}`}>
         <div className="priority-menu">
           <div className='priority-label'>
-        <p className={`priority-label ${task.priority.toLowerCase()}-priority`}>
-
-</p>
-{task.priority === 'HIGH' && <span className='priority-label'>HIGH PRIORITY</span>}
-  {task.priority === 'MODERATE' && <span className='priority-label'>MODERATE PRIORITY</span>}
-  {task.priority === 'LOW' && <span className='priority-label'>LOW PRIORITY</span>}
-  </div >
+            <p className={`priority-label ${task.priority.toLowerCase()}-priority`} />
+            {task.priority === 'HIGH' && <span className='priority-label'>HIGH PRIORITY</span>}
+            {task.priority === 'MODERATE' && <span className='priority-label'>MODERATE PRIORITY</span>}
+            {task.priority === 'LOW' && <span className='priority-label'>LOW PRIORITY</span>}
+          </div>
           <div className="menu-container">
             <button className="menu-btn" onClick={() => setShowMenu(!showMenu)}>
               <img src={menuIcon} alt="Menu" className="menu-icon" />
@@ -162,7 +150,6 @@ const TodoCard = ({ task, onEdit, onDelete, onMove, onUpdateCheckedCount, collap
         </div>
         <p className="title" title={task.title}>{task.title}</p>
         
-        {/* PopupComponent */}
         {showPopup && (
           <PopupComponent
             actionText="Delete"
@@ -174,7 +161,7 @@ const TodoCard = ({ task, onEdit, onDelete, onMove, onUpdateCheckedCount, collap
         <div className="checklist-toggle-container">
           <p className="checklist-head">
             <span>
-              Checklist ({checkedCount} / {task.checklist.length})
+              Checklist ({task.checklist.filter(item => item.checked).length} / {task.checklist.length})
             </span>
             <button className="collapse-expand-btn" onClick={toggleChecklist}>
               <svg
@@ -214,7 +201,7 @@ const TodoCard = ({ task, onEdit, onDelete, onMove, onUpdateCheckedCount, collap
             {getMonthAndDate()}
           </div>}
           <div className="mutate-btns-container">
-            {availableStatusOptions.map((status, index) => (
+            {statusOptions.filter(status => status !== task.status).map((status, index) => (
               <button key={index} className="status-btn" onClick={() => onMove(status)}>
                 {status}
               </button>

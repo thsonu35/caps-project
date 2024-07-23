@@ -29,9 +29,17 @@ const Register = () => {
         setFormData({ ...formData, [name]: value });
     };
 
-    const redirectlogin =async () =>{
-        navigate('/login')
-    }
+    const validatePassword = (password) => {
+        const minLength = 8;
+        const hasNumber = /\d/;
+        const hasLetter = /[a-zA-Z]/;
+        const hasSpecialChar = /[!@#$%^&*(),.?":{}|<>]/;
+        if (password.length < minLength) return 'Password must be at least 8 characters long';
+        if (!hasNumber.test(password)) return 'Password must contain at least one number';
+        if (!hasLetter.test(password)) return 'Password must contain at least one letter';
+        if (!hasSpecialChar.test(password)) return 'Password must contain at least one special character';
+        return '';
+    };
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -48,8 +56,14 @@ const Register = () => {
             return;
         }
 
+        const passwordValidationError = validatePassword(password);
+        if (passwordValidationError) {
+            toast.error(passwordValidationError);
+            return;
+        }
+
         try {
-            const response = await axios.post('https://serverside-api.onrender.com/api/auth/register', { name, email, password }, {
+            const response = await axios.post('http://localhost:3000/api/auth/register', { name, email, password }, {
                 headers: {
                     'Content-Type': 'application/json'
                 }
@@ -97,13 +111,25 @@ const Register = () => {
                                 <div className="input-box">
                                     <div className='inpwlogo'>
                                         <img src={userIcon} alt="User Icon" />
-                                        <input type="text" name="name" id="name" placeholder="Name" onChange={handleChange} />
+                                        <input 
+                                            type="text" 
+                                            name="name" 
+                                            id="name" 
+                                            placeholder="Name" 
+                                            onChange={handleChange} 
+                                        />
                                     </div>
                                 </div>
                                 <div className="input-box">
                                     <div className='inpwlogo'>
                                         <img src={emailIcon} alt="Email Icon" />
-                                        <input type="email" name="email" id="email" placeholder="Email" onChange={handleChange} />
+                                        <input 
+                                            type="email" 
+                                            name="email" 
+                                            id="email" 
+                                            placeholder="Email" 
+                                            onChange={handleChange} 
+                                        />
                                     </div>
                                 </div>
                                 <div className="input-box">
@@ -142,11 +168,11 @@ const Register = () => {
                                         />
                                     </div>
                                 </div>
-                                <button type="submit" className="register-button" onClick={handleSubmit}>Register</button>
+                                <button type="submit" className="register-button">Register</button>
                             </form>
                         </div>
                         <footer>
-                            <p>Already have an account? <a onClick={redirectlogin} >Log in</a></p>
+                            <p>Already have an account? <a onClick={() => navigate('/login')}>Log in</a></p>
                         </footer>
                     </div>
                 </div>

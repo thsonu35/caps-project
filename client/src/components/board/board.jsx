@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import TodoCard from '../todocard/TodoCard';
+// import TodoCard from '../todocard/TodoCard';
 import TaskForm from '../TaskForm/TaskForm';
 import colaps from '../../../public/codicon.png';
 import './board.css';
@@ -13,20 +13,20 @@ import AddUser from '../adduser/adduser'; // Assuming correct path for AddUser c
 const Board = () => {
   const [tasks, setTasks] = useState([]);
   const [change, setChange] = useState(" ");
-  const notify = (data) => toast.success("Status update");
+  const notify = () => toast.success("Status update");
   const [timeframe, setTimeframe] = useState();
   const [showTaskForm, setShowTaskForm] = useState(false);
   const [currentTask, setCurrentTask] = useState(null);
   const [collapsedAll, setCollapsedAll] = useState(true);
   const [showAddUser, setShowAddUser] = useState(false);
-  const [assignEmail, setAssignEmail] = useState('');
-  const [assignError, setAssignError] = useState('');
+  // const [assignEmail, setAssignEmail] = useState('');
+  // const [assignError, setAssignError] = useState('');
 
   const toggleCollapse = () => {
     setCollapsedAll(!collapsedAll);
   };
 
-  const [collapsedColumns, setCollapsedColumns] = useState({
+  const [collapsedColumns] = useState({
     backlog: false,
     todo: false,
     inProgress: false,
@@ -57,8 +57,8 @@ const Board = () => {
   const handleSaveTask = async (taskData) => {
     try {
       const url = taskData._id 
-        ? `https://serverside-api.onrender.com/api/tasks/${taskData._id}` 
-        : 'https://serverside-api.onrender.com/api/tasks';
+        ? `http://localhost:3000/api/tasks/${taskData._id}` 
+        : 'http://localhost:3000/api/tasks';
       const method = taskData._id ? 'PUT' : 'POST';
 
       const response = await fetch(url, {
@@ -77,14 +77,13 @@ const Board = () => {
       notify(taskData._id ? "Task Updated" : "Task Created");
 
       setTasks(prevTasks => {
-        const updatedTasks = [...prevTasks];
+        const updatedTasks = {...prevTasks};
         if (taskData._id) {
-          const index = updatedTasks.findIndex(task => task._id === savedTask._id);
-          if (index !== -1) {
-            updatedTasks[index] = savedTask;
-          }
+          updatedTasks.data = updatedTasks.data.map(task => 
+            task._id === savedTask._id ? savedTask : task
+          );
         } else {
-          updatedTasks.push(savedTask);
+          updatedTasks.data = [...updatedTasks.data, savedTask];
         }
         return updatedTasks;
       });
@@ -98,8 +97,7 @@ const Board = () => {
 
   const handleAssign = async (email) => {
     try {
-      // Call backend API to check if user with `email` exists
-      const response = await fetch(`https://serverside-api.onrender.com/api/users/${email}`, {
+      const response = await fetch(`http://localhost:3000/api/users/${email}`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
@@ -110,9 +108,7 @@ const Board = () => {
         throw new Error('User not found');
       }
 
-      // If user exists, perform assignment logic
-      // Example logic: update task with assigned user
-      // Replace with your specific logic here
+     
 
       setAssignError('');
       setShowAddUser(false);
@@ -137,14 +133,12 @@ const Board = () => {
       <Toaster />
       
       <div className="select-container">
-        <l className="board-text"><p1>Board <img src={assign} alt="assign" onClick={openAssignPopup} /></p1>
-        <p className='filterbtn'>  
-          <select id="timeframe" name="timeframe" onChange={handleTimeframeChange}>
-            <option value="thisWeek">This Week</option>
-            <option value="today">Today</option>
-            <option value="thisMonth">This Month</option>
-          </select>
-        </p></l>
+        <l className="board-text"><p1>Board <img src={assign} alt="" onClick={openAssignPopup} /></p1>
+        <p className='filterbtn'>  <select id="timeframe" name="timeframe" onChange={handleTimeframeChange}>
+        <option value="thisWeek">This Week</option>
+          <option value="today">Today</option>
+          <option value="thisMonth">This Month</option>
+        </select></p></l>
       
       </div>
 
@@ -212,10 +206,7 @@ const Board = () => {
       {showAddUser && (
         <AddUser
           onConfirm={handleAssign}
-          onCancel={()=> {
-            setShowAddUser(false);
-            handleAssignCancel();
-          }}
+          onCancel={handleAssignCancel}
         />
       )}
 

@@ -15,7 +15,7 @@ export const getAllTasks = async (timeframe) => {
     const headers = {
       Authorization: token,
     };
-    const response = await axios.get(`https://serverside-api.onrender.com/api/tasks?filter=${timeframe}`,{headers});
+    const response = await axios.get(`http://localhost:3000/api/tasks?filter=${timeframe}`,{headers});
     return response; // Return only data from the response
   } catch (error) {
    

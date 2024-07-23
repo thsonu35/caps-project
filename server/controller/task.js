@@ -1,27 +1,31 @@
-const Task = require('../models/Task'); 
-const User = require('../models/user'); 
+const Task = require('../models/Task'); // Ensure the Task model is correctly imported
+const User = require('../models/User'); // Ensure the User model is correctly imported
 
 const createTask = async (req, res, next) => {
     try {
         const { title, priority, dueDate, checklist, status } = req.body;
 
+        // Check for mandatory fields
         if (!title || !priority || !checklist) {
             return res.status(400).json({ message: "Title, priority, checklist are mandatory fields" });
         }
 
+        // Create a new task
         const newTask = new Task({
             title,
             priority,
             dueDate,
             checklist,
             status,
-            userEmail: req.email, 
-            userId: req.userId 
+            userEmail: req.email, // Assuming you have the user's email in the request object
+            userId: req.userId // Assuming you have the user's ID in the request object
         });
 
+        // Save the task to the database
         await newTask.save();
         console.log(newTask);
 
+        // Send success response
         res.status(200).json(newTask);
     } catch (err) {
         console.error(err.message);
@@ -66,34 +70,6 @@ const getTasksForUser = async (req, res) => {
     } catch (err) {
         console.error('Error fetching tasks:', err);
         res.status(500).json({ message: 'Server error while fetching tasks' });
-    }
-};
-
-const updateChecklistItem = async (req, res) => {
-    const { taskId, index } = req.params;
-    const { checked } = req.body;
-
-    try {
-        let task = await Task.findById(taskId);
-
-        if (!task) return res.status(404).json({ msg: 'Task not found' });
-
-        if (task.userId.toString() !== req.userId) {
-            return res.status(401).json({ msg: 'User not authorized' });
-        }
-
-        if (index < 0 || index >= task.checklist.length) {
-            return res.status(400).json({ msg: 'Invalid checklist item index' });
-        }
-
-        task.checklist[index].checked = checked;
-
-        await task.save();
-
-        res.json(task);
-    } catch (err) {
-        console.error(err.message);
-        res.status(500).send('Server error');
     }
 };
 
@@ -171,17 +147,22 @@ const shareTask = async (req, res) => {
     const taskId = req.params.id;
 
     try {
+        // Fetch the task from the database
         const task = await Task.findById(taskId);
 
         if (!task) {
             return res.status(404).json({ error: 'Task not found' });
         }
 
+        // Generate a unique token for sharing
         const shareToken = taskId;
 
+        // Save this token somewhere (e.g., database) to associate it with the task
 
+        // Example: Construct the shareable link
         const shareLink = `${req.protocol}://${req.get('host')}/api/share/${taskId}`;
 
+        // Example: Send task details via email (replace with your actual email sending logic)
         const taskDetails = {
             title: task.title,
             priority: task.priority,
@@ -189,6 +170,7 @@ const shareTask = async (req, res) => {
             checklist: task.checklist,
         };
 
+        // Respond with success message and shareable link
         res.status(200).json({ message: 'Task shared successfully', taskDetails });
     } catch (error) {
         console.error('Error sharing task:', error);
@@ -198,8 +180,6 @@ const shareTask = async (req, res) => {
 
 module.exports = {
     moveTask,
-    updateChecklistItem,
-
     shareTask,
     createTask,
     getTasksForUser,

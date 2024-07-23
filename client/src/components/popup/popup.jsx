@@ -12,7 +12,7 @@ const PopupComponent = ({ onConfirm, onCancel, actionText }) => {
           <button className="confirm" onClick={onConfirm}>
             Yes, <span>{actionText}</span>
           </button>
-          <button className="cancel" onClick={onCancel}>
+          <button className="can" onClick={onCancel}>
             Cancel
           </button>
         </div>

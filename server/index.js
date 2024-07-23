@@ -1,16 +1,17 @@
 const express = require('express');
-const port = 3000;
 const bodyParser = require('body-parser');
-const app = express();
 const fs = require('fs');
 const path = require('path');
-const authRoutes = require('./routes/auth');
-const taskRoutes = require('./routes/task');
 const mongoose = require('mongoose');
 const cors = require('cors');
+const authRoutes = require('./routes/auth');
+const taskRoutes = require('./routes/task');
+require('dotenv').config();
+
+const app = express();
+const port = process.env.PORT || 3000;
 
 // Log streams
-const logStream = fs.createWriteStream(path.join(__dirname, 'log.txt'), { flags: 'a' });
 const errorStream = fs.createWriteStream(path.join(__dirname, 'error.txt'), { flags: 'a' });
 
 // Middleware
@@ -22,30 +23,25 @@ app.use(cors());
 app.use('/api/auth', authRoutes);
 app.use('/api', taskRoutes);
 
-// Logger middleware
-app.use((req, res, next) => {
-    const now = new Date();
-    const time = ` ${now.toLocaleTimeString()}`;
-    const log = `${req.method} ${req.originalUrl} ${time}`;
-    logStream.write(log + '\n');
-    console.log(log);
-    next();
+// Error handling middleware
+app.use((res) => {
+    res.status(404).send('Route not found');
 });
 
-// Error handling middleware
-app.use((req, res, next) => {
+app.use((err, req, res) => {
     const now = new Date();
-    const time = ` ${now.toLocaleTimeString()}`;
-    const error = `${req.method} ${req.originalUrl} ${time}`;
+    const time = now.toLocaleTimeString();
+    const error = `${req.method} ${req.originalUrl} ${time} - ${err.message}`;
     errorStream.write(error + '\n');
-    res.status(404).send('Route not found');
+    console.error(error);
+    res.status(500).send('Internal Server Error');
 });
 
 // MongoDB connection
 mongoose
-    .connect('mongodb+srv://caps:Password@cluster1.9xljwe4.mongodb.net/?retryWrites=true&w=majority&appName=Cluster1')
+    .connect(process.env.MONGO_URI, )
     .then(() => console.log('Connected to DB'))
-    .catch((err) => console.log(err));
+    .catch((err) => console.error('Failed to connect to DB:', err));
 
 // Start server
 app.listen(port, () => {

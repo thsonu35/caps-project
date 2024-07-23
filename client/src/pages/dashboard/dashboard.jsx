@@ -1,13 +1,11 @@
 import React, { useState } from 'react';
-import { Routes, Route } from 'react-router-dom';
 
 import Sidebar from '../../components/slidebar/slidebar';
 import Header from '../../components/headerDash/header';
 import Board from '../../components/board/board';
 import TaskForm from '../../components/TaskForm/TaskForm';
 
-
-function Dashboard() {
+const Dashboard = () => {
     const [showTaskForm, setShowTaskForm] = useState(false);
 
     const handleSaveTask = (task) => {
@@ -21,18 +19,20 @@ function Dashboard() {
     };
 
     return (
-        <div>
-                <Sidebar />
+        <div className="dashboard-container">
+            <Sidebar />
             <div className="main-content">
-        
-
                 <Header />
                 <Board />
-                
-                
             </div>
+            {showTaskForm && (
+                <TaskForm 
+                    onSave={handleSaveTask} 
+                    onCancel={handleCancelTask} 
+                />
+            )}
         </div>
     );
-}
+};
 
 export default Dashboard;

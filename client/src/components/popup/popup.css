@@ -50,11 +50,11 @@
     text-transform: capitalize;
 }
 
-.popup-content .cancel {
+.popup-content .can {
     color: red;
     background-color: white;
     border: 1px solid red;
-    padding: 0.9rem 125px;
+    padding: 0.9rem 120px;
     border-radius: 15px;
     font-size: 0.9rem;
     font-weight: 600;

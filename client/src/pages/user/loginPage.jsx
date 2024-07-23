@@ -2,11 +2,9 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Toaster, toast } from 'react-hot-toast';
 import { useNavigate } from 'react-router-dom';
-import Register from '../user/registerPage'
 import './Register.css';
 import astronautImage from '/Artastronot.png';
 import logo from '/Backastro.png';
-// import user from '/user.png';
 import eyeIcon from '/eye.png'; 
 import lockIcon from '/lock.png';
 import emailIcon from '/email.png';
@@ -34,41 +32,37 @@ const LoginPage = () => {
         setFormData({ ...formData, [e.target.name]: e.target.value });
     };
 
-    const register =()=>{
-        Register()
-    }
+    const handleRegisterClick = () => {
+        navigate('/register');
+    };
 
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            const response = await axios.post('https://serverside-api.onrender.com/api/auth/login', formData, {
+            const response = await axios.post('http://localhost:3000/api/auth/login', formData, {
                 headers: {
                     'Content-Type': 'application/json'
                 }
             });
-            console.log('Login response:', response);
 
             if (response.status === 200) {
-                console.log('Login successful:', response);
                 localStorage.setItem('token', response.data.token);
                 localStorage.setItem('email', response.data.email);
                 localStorage.setItem('name', response.data.name);
                 navigate('/dashboard');
                 toast.success('Login successful');
             } else {
-                console.error('Login error:', response);
                 setError('Invalid email or password');
                 toast.error('Login failed');
             }
         } catch (error) {
-            console.error('Login failed:', error);
             setError('An error occurred while logging in');
             toast.error('An error occurred while logging in');
         }
     };
 
     const toggleShowPassword = () => {
-        setShowPassword(!showPassword);
+        setShowPassword(prev => !prev);
     };
 
     return (
@@ -97,7 +91,14 @@ const LoginPage = () => {
                                 <div className="input-box">
                                     <div className='inpwlogo'>
                                         <img src={emailIcon} alt="Email Icon" />
-                                        <input type="email" name="email" id="email" placeholder="Email" onChange={handleChange} />
+                                        <input 
+                                            type="email" 
+                                            name="email" 
+                                            id="email" 
+                                            placeholder="Email" 
+                                            value={formData.email} 
+                                            onChange={handleChange} 
+                                        />
                                     </div>
                                 </div>
                                 <div className="input-box">
@@ -108,6 +109,7 @@ const LoginPage = () => {
                                             name="password" 
                                             id="password" 
                                             placeholder="Password" 
+                                            value={formData.password} 
                                             onChange={handleChange} 
                                         />
                                         <img 
@@ -122,7 +124,7 @@ const LoginPage = () => {
                             </form>
                         </div>
                         <footer>
-                            <p>Don't have an account yet? <a onClick={register}>Register</a></p>
+                            <p>Don't have an account yet? <a onClick={handleRegisterClick}>Register</a></p>
                         </footer>
                     </div>
                 </div>
