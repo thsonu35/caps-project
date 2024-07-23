@@ -5,3 +5,6 @@ services:
     buildCommand: npm run build
     startCommand: npx serve -s build
     staticPublishPath: build
+    routes:
+      - src: /.*   # This matches all routes
+        dest: /index.html
