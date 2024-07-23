@@ -9,7 +9,7 @@ const taskRoutes = require('./routes/task');
 require('dotenv').config();
 
 const app = express();
-const port = process.env.PORT || 3000;
+const port = process.env.PORT || 4000;
 
 // Log streams
 const errorStream = fs.createWriteStream(path.join(__dirname, 'error.txt'), { flags: 'a' });
