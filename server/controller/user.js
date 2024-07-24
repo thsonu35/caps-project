@@ -138,9 +138,9 @@ const checkUserByEmail = async (req, res) => {
 
     try {
         // Find a user with the specified email
-        const User = await User.findOne({ email });
+        const user = await User.findOne({ email });
 
-        if (User) {
+        if (user) {
             // If user exists, send a response indicating that the user exists
             return res.status(200).json({ exists: true, message: 'User found in the database.' });
         } else {
