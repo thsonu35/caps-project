@@ -133,8 +133,29 @@ const nameuser = async (req, res) => {
     }
 };
 
+const checkUserByEmail = async (req, res) => {
+    const { email } = req.body; // Extract email from the request body
+
+    try {
+        // Find a user with the specified email
+        const user = await User.findOne({ email });
+
+        if (user) {
+            // If user exists, send a response indicating that the user exists
+            return res.status(200).json({ exists: true, message: 'User found in the database.' });
+        } else {
+            // If user does not exist, send a response indicating that the user does not exist
+            return res.status(404).json({ exists: false, message: 'User not found in the database.' });
+        }
+    } catch (err) {
+        // Handle any errors that occur during the process
+        console.error(err);
+        return res.status(500).json({ error: 'Internal server error' });
+    }
+};
 
 
 
 
-module.exports = {allUsers, registerUser, nameuser, loginUser,updatePassword};
+
+module.exports = {allUsers, registerUser, nameuser, loginUser,updatePassword,checkUserByEmail};

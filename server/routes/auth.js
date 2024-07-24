@@ -1,5 +1,5 @@
 const express = require('express');
-const { registerUser,nameuser,updatePassword, loginUser,allUsers } = require('../controller/user');
+const { registerUser,nameuser,updatePassword, loginUser,allUsers, checkUserByEmail } = require('../controller/user');
 const {auth} = require('../middleware/auth')
 // const { verify } = require('jsonwebtoken');
 
@@ -16,6 +16,9 @@ router.post('/login',  loginUser);
 
 // http://localhost:3000/api/auth/all
 router.get ('/all',auth,allUsers);
+
+router.post('/check-user', checkUserByEmail);
+
 
 
 // http://localhost:3000/api/auth/username
